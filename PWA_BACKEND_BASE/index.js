@@ -1,8 +1,10 @@
+
 const express = require("express");
 const http = require("http");
 const mongoose = require("mongoose");
 const path = require("path");
 const socketIo = require("socket.io");
+const cors = require("cors");
 const config = require("./config");
 
 const port = process.env.PORT || 3000;
@@ -14,6 +16,11 @@ const server = http.createServer(app);
 
 const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
 
+app.use(cors({
+  origin: frontendUrl,
+  credentials: true
+}));
+
 const io = socketIo(server, {
   cors: {
     origin: frontendUrl,
@@ -24,6 +31,7 @@ const io = socketIo(server, {
 
 io.on("connection", (socket) => {
   console.log("Socket, new connection", socket.id);
+
   socket.on("disconnect", () => {
     console.log("A user disconnected");
   });
@@ -40,6 +48,7 @@ mongoose
   .connect(config.db)
   .then(() => {
     console.log("MongoDB connection successful!");
+
     server.listen(port, hostname, () => {
       console.log(`Server running on port ${port}`);
     });

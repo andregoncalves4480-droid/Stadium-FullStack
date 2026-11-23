@@ -1,19 +1,21 @@
+
 import { io } from "socket.io-client";
 
-// Create socket instance using the proxy (no need for full URL)
-const socket = io();
+const backendUrl = import.meta.env.VITE_API_URL || undefined;
+
+const socket = io(backendUrl, {
+  withCredentials: true,
+});
 
 export const initSocket = () => {
   console.log("Inicializando socket...");
 
-  // Check if socket is connected
   if (socket.connected) {
     console.log("Estou conectado");
   } else {
     console.log("Tentando conectar...");
   }
 
-  // Listen for connection events
   socket.on("connect", () => {
     console.log("Conectado ao servidor:", socket.id);
   });

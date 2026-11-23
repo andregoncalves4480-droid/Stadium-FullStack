@@ -1,5 +1,7 @@
+
+import { apiFetch } from "./client";
+
 export const getPerfil = () =>
-  fetch("/api/users/perfil", {
+  apiFetch("/api/users/perfil", {
     headers: { Accept: "application/json" },
-    credentials: "include",
   }).then((response) => response.json());
